@@ -1,0 +1,10 @@
+/build
+/gradle
+/app/build
+/app/libs
+*.gradle
+*.properties
+*.bat
+*.iml
+*.pro
+*.jar

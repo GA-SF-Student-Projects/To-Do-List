@@ -37,17 +37,17 @@ public class MainActivity extends AppCompatActivity {
         returnedData = new ArrayList<>();
         myToDoListsView.setAdapter(myListsAdapter);
 
-        myToDoListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle sendBundle = new Bundle();
-                sendBundle.putStringArrayList("sendList", myListsData);
-
-                // ++++++ ==== DOES NOT WORK ======
-                // CHANGE TO SEND HAS MAP DATA
-                startActivityForResult(toItemActivity, REQUEST_CODE, sendBundle);
-            }
-        });
+//        myToDoListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Bundle sendBundle = new Bundle();
+//                sendBundle.putStringArrayList("sendList", myListsData);
+//
+//                // ++++++ ==== DOES NOT WORK ======
+//                // CHANGE TO SEND HAS MAP DATA
+//                startActivityForResult(toItemActivity, REQUEST_CODE, sendBundle);
+//            }
+//        });
 
         //Goes to new activity to create a new list
         addNewListButton.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView currentItem = (TextView) view;
                 strikeThroughTextView(currentItem);
-                return false;
+                return true;
             }
         });
     }

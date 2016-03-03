@@ -140,20 +140,20 @@ public class ListItemsActivity extends AppCompatActivity {
             currentItem.setPaintFlags(1281);
         }
     }
-
-    // ++===== DOES NOT WORK =====//
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == MainActivity.REQUEST_CODE){
-
-            if(resultCode == RESULT_OK){
-                Bundle sentBundle = data.getBundleExtra("sendList");
-                ArrayList<String> testList = sentBundle.getStringArrayList("sendList");
-
-                newItemAdapter.addAll(testList);
-                newItemAdapter.notifyDataSetChanged();
-            }
-        }
-    }
+//
+//    // ++===== DOES NOT WORK =====//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == MainActivity.REQUEST_CODE){
+//
+//            if(resultCode == RESULT_OK){
+//                Bundle sentBundle = data.getBundleExtra("sendList");
+//                ArrayList<String> testList = sentBundle.getStringArrayList("sendList");
+//
+//                newItemAdapter.addAll(testList);
+//                newItemAdapter.notifyDataSetChanged();
+//            }
+//        }
+//    }
 }

@@ -1,6 +1,7 @@
 package siu.example.com.to_dolist;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeActivity();
+        longItemClickStrikeThrough();
+
 
         /// Setting the Adapter with new data
         returnedData = new ArrayList<>();
@@ -80,5 +84,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void longItemClickStrikeThrough() {
+        myToDoListsView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView currentItem = (TextView) view;
+                strikeThroughTextView(currentItem);
+                return false;
+            }
+        });
+    }
+
+    private void strikeThroughTextView(TextView currentItem){
+        int paintFlags = currentItem.getPaintFlags();
+        if(paintFlags == 1281){
+            currentItem.setPaintFlags(paintFlags | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else{
+            currentItem.setPaintFlags(1281);
+        }
+    }
+
 
 }

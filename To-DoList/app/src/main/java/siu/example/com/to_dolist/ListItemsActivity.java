@@ -48,10 +48,8 @@ public class ListItemsActivity extends AppCompatActivity {
         dataIntent = getIntent();
         updateListItems(dataIntent);
 
-
         newItemAdapter = new ArrayAdapter<>(ListItemsActivity.this, android.R.layout.simple_list_item_1, listItems);
         itemsListView.setAdapter(newItemAdapter);
-
 
         // Save data to Main Activity
         saveButtonClickedReturnHome();
@@ -59,16 +57,8 @@ public class ListItemsActivity extends AppCompatActivity {
         // Add new item to list
         addItemToListButtonClicked();
 
-
-        // Strike through item in list
-        itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView currentItem = (TextView) view;
-                strikeThroughTextView(currentItem);
-                return true;
-            }
-        });
+        // Strike through item on list
+        strikeThroughListViewItem();
     }
 
     private void updateListItems(Intent dataIntent){
@@ -95,8 +85,6 @@ public class ListItemsActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void setViews(){
         itemsListView = (ListView)findViewById(R.id.list_item_listview);
         addItemButton = (FloatingActionButton)findViewById(R.id.list_item_addList_button);
@@ -104,7 +92,6 @@ public class ListItemsActivity extends AppCompatActivity {
         inputListItem = (EditText)findViewById(R.id.list_item_input_edittext);
         saveButton = (Button)findViewById(R.id.list_temp_button);
     }
-
 
     // Add new item to list
     private void addItemToListButtonClicked(){
@@ -147,6 +134,17 @@ public class ListItemsActivity extends AppCompatActivity {
                     setResult(RESULT_OK, dataIntent);
                     finish();   // Go to garbage collecting and remove from memory
                 }
+            }
+        });
+    }
+
+    private void strikeThroughListViewItem(){
+        itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView currentItem = (TextView) view;
+                strikeThroughTextView(currentItem);
+                return true;
             }
         });
     }

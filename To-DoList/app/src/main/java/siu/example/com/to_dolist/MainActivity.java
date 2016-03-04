@@ -1,5 +1,7 @@
 package siu.example.com.to_dolist;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
@@ -141,6 +143,21 @@ public class MainActivity extends AppCompatActivity {
         } else{
             currentItem.setPaintFlags(noStrikeThroughFlag);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+     //   super.onBackPressed();
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        MainActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 }
 

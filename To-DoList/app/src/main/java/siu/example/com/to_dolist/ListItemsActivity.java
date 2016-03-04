@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class ListItemsActivity extends AppCompatActivity {
+    public static final String TAG = "MAIN";
 
     ListView itemsListView;
     FloatingActionButton addItemButton;
@@ -37,15 +38,13 @@ public class ListItemsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
 
+        Log.d(TAG,"On Create: Loaded;");
 
         initializeActivity();
 
         listItems = new ArrayList<>();
         newItemAdapter = new ArrayAdapter<>(ListItemsActivity.this, android.R.layout.simple_list_item_1, listItems);
         itemsListView.setAdapter(newItemAdapter);
-
-
-
 
         testIntent = getIntent();
         if(testIntent == null){
@@ -64,19 +63,9 @@ public class ListItemsActivity extends AppCompatActivity {
             }
         }
 
-
-//        data = getIntent();
-//        if(data == null){
-//            listItems.addAll(data.getStringArrayListExtra(MainActivity.DATA_KEY));
-//        }
-
-
-
         returnHomeButton();
 
         addItemToListButton();
-
-        itemClickToDescription();
 
         longItemClickStrikeThrough();
     }
@@ -90,12 +79,22 @@ public class ListItemsActivity extends AppCompatActivity {
         tempButton = (Button)findViewById(R.id.list_temp_button);
     }
 
-    private boolean checkListTitleInput(){
-        return inputListTitle.getText().toString().isEmpty();
-    }
+    private void addItemToListButton(){
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String addNewItem = inputListItem.getText().toString();
 
-    private boolean checkListItemInput(){
-        return inputListItem.getText().toString().isEmpty();
+                if (checkListItemInput()) {
+                    Toast.makeText(ListItemsActivity.this, "Please input an item", Toast.LENGTH_SHORT).show();
+                } else {
+                    inputListItem.getText().clear();
+                    listItems.add(addNewItem);
+                    Log.d("MAIN", "----ADD ITEM TO LIST BUTTON CLICKED: " + listItems);
+                    newItemAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void returnHomeButton() {
@@ -109,46 +108,20 @@ public class ListItemsActivity extends AppCompatActivity {
                     // Append title to bottom of our list
                     listItems.add(inputListTitle.getText().toString());
 
-                    Log.d("MAIN", "TTTTTTTTTTBUTTOM TO HOME"+listItems);
+                    Log.d("MAIN", "TTTTTTTTTTBUTTOM TO HOME" + listItems);
 
                     Bundle listBundle = new Bundle();
                     listBundle.putStringArrayList("returnList", listItems);
 
 
-                    data = new Intent();
+                    //data = new Intent();
                     //data.putExtra("result", inputListTitle.getText().toString());  //Send String "Surprise" with key to "result"
-                    data.putExtra("result", listBundle);
-                    setResult(RESULT_OK, data);
+                    //data.putExtra("result", listBundle);
+                    testIntent.putExtra("result", listBundle);
+                    //setResult(RESULT_OK, data);
+                    setResult(RESULT_OK, testIntent);
                     finish();   // Go to garbage collecting and remove from memory
                 }
-            }
-        });
-    }
-
-    private void addItemToListButton(){
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String addNewItem = inputListItem.getText().toString();
-
-                if (checkListItemInput()) {
-                    Toast.makeText(ListItemsActivity.this, "Please input an item", Toast.LENGTH_SHORT).show();
-                } else {
-                    inputListItem.getText().clear();
-                    listItems.add(addNewItem);
-                    Log.d("MAIN", "PpPPPPPPPPP----" + listItems);
-                    newItemAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-    }
-
-    private void itemClickToDescription(){
-        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView currentItem = (TextView) view;
-                currentItem.setText("Hello");
             }
         });
     }
@@ -173,23 +146,27 @@ public class ListItemsActivity extends AppCompatActivity {
         }
     }
 
+    private boolean checkListTitleInput(){
+        return inputListTitle.getText().toString().isEmpty();
+    }
+
+    private boolean checkListItemInput(){
+        return inputListItem.getText().toString().isEmpty();
+    }
+
+
+    //    private void itemClickToDescription(){
+//        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                TextView currentItem = (TextView) view;
+//                currentItem.setText("Hello");
+//            }
+//        });
+//    }
+
+
 }
 
 
 
-//
-//    // ++===== DOES NOT WORK =====//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == MainActivity.REQUEST_CODE){
-//
-//            if(resultCode == RESULT_OK){
-//                Bundle sentBundle = data.getBundleExtra("sendList");
-//                ArrayList<String> testList = sentBundle.getStringArrayList("sendList");
-//
-//                newItemAdapter.addAll(testList);
-//                newItemAdapter.notifyDataSetChanged();
-//            }
-//        }
-//    }

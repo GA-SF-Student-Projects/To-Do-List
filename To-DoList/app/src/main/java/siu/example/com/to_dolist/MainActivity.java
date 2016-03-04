@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MAIN";
     public static final int REQUEST_CODE = 42;
     public static final int ITEM_REQUEST_CODE = 33;
     public static final String DATA_KEY = "myDataKey";
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
         initializeActivity();
         longItemClickStrikeThrough();
+
+
+        Log.d(TAG,"ON CREATE PRINT HASHMAP: " + myHashMapData);
 
         /// Setting the Adapter with new data
         returnedData = new ArrayList<>();
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Get item from view, then through into hashmap, then push to an array list
                 String clickedItem = ((TextView)view).getText().toString();
-                //Log.d("Main", "++++++++WHEN CLICKED"+myHashMapData.get(clickedItem));
+                Log.d("Main", "++++++++WHEN CLICKED PRINT HASHMAP"+myHashMapData.get(clickedItem));
 
                 toItemActivity.putStringArrayListExtra(DATA_KEY, myHashMapData.get(clickedItem));
                 startActivityForResult(toItemActivity, ITEM_REQUEST_CODE);
@@ -82,11 +86,16 @@ public class MainActivity extends AppCompatActivity {
                 Bundle returnedBundle = data.getBundleExtra("result");
                 returnedData = returnedBundle.getStringArrayList("returnList");
                 String listTitle = returnedData.get(returnedData.size()-1);
-                myHashMapData.put(listTitle, returnedData);
-                Log.d("Main", "===============Returned Data"+myHashMapData);
+                if(myHashMapData.containsKey(listTitle)){
+                    Log.d(TAG, "TAG ALREADY INSIDE THE HASHMAP");
+                    myHashMapData.put(listTitle, returnedData);
+                }else{
+                    myHashMapData.put(listTitle, returnedData);
+                    Log.d("Main", "===============Returned Data" + myHashMapData);
 
-                myListsAdapter.addAll(listTitle);
-                myListsAdapter.notifyDataSetChanged();
+                    myListsAdapter.add(listTitle);
+                    myListsAdapter.notifyDataSetChanged();
+                }
             }
         }
 
@@ -101,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 myListsAdapter.notifyDataSetChanged();
             }
         }
-
     }
 
     private void longItemClickStrikeThrough() {
@@ -123,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
             currentItem.setPaintFlags(1281);
         }
     }
-
-
 }
 
 

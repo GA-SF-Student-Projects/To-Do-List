@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFAAA"
     tools:context=".ListItemsActivity">
 
     <EditText
@@ -26,6 +27,7 @@
         android:id="@+id/list_item_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="60dp"
         android:layout_below="@id/list_item_input_edittext">
 
     </ListView>
@@ -37,15 +39,18 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:tint="@android:color/holo_green_light"
+        android:tint="#DCF9FF"
         android:src="@android:drawable/ic_input_add"/>
 
     <Button
         android:id="@+id/list_temp_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tempButton"
-        android:layout_alignParentBottom="true"/>
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:background="#E4FFEE"
+        android:textColor="#808080"
+        android:text="Save"
+        android:layout_margin="20dp"
+        android:layout_alignParentBottom="true" />
 
 
 </RelativeLayout>

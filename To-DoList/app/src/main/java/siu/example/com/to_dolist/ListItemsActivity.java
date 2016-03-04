@@ -2,10 +2,10 @@ package siu.example.com.to_dolist;
 
 import android.content.Intent;
 import android.graphics.Paint;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,9 +24,13 @@ public class ListItemsActivity extends AppCompatActivity {
     ArrayAdapter<String> newItemAdapter;
     EditText inputListTitle;
     EditText inputListItem;
-    ArrayList<String> listItemData;
+    ArrayList<String> listItems;
+    ArrayList<String> listSentFromMain;
+    Intent data;
 
     Button tempButton;
+    Intent testIntent;
+    ArrayList<String> testArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +40,37 @@ public class ListItemsActivity extends AppCompatActivity {
 
         initializeActivity();
 
+        listItems = new ArrayList<>();
+        newItemAdapter = new ArrayAdapter<>(ListItemsActivity.this, android.R.layout.simple_list_item_1, listItems);
         itemsListView.setAdapter(newItemAdapter);
+
+
+
+
+        testIntent = getIntent();
+        if(testIntent == null){
+            Log.d("MAIN", "+++NULLL++++++"+testIntent);
+        }else{
+            listSentFromMain = testIntent.getStringArrayListExtra(MainActivity.DATA_KEY);
+            testArrayList = listSentFromMain;
+            if(listSentFromMain != null){
+                String titleFromMain = listSentFromMain.get(listSentFromMain.size()-1);
+                inputListTitle.setText(titleFromMain);
+                listSentFromMain.remove(listSentFromMain.size() - 1);
+                listItems = listSentFromMain;
+                newItemAdapter.addAll(listItems);
+                newItemAdapter.notifyDataSetChanged();
+                Log.d("MAIN", "+++++++++NOTNULL"+ listItems + "-----" + testArrayList.size());
+            }
+        }
+
+
+//        data = getIntent();
+//        if(data == null){
+//            listItems.addAll(data.getStringArrayListExtra(MainActivity.DATA_KEY));
+//        }
+
+
 
         returnHomeButton();
 
@@ -45,19 +79,13 @@ public class ListItemsActivity extends AppCompatActivity {
         itemClickToDescription();
 
         longItemClickStrikeThrough();
-
-        //Checkbox for deleteALL Items
-
     }
-
 
     private void initializeActivity(){
         itemsListView = (ListView)findViewById(R.id.list_item_listview);
         addItemButton = (FloatingActionButton)findViewById(R.id.list_item_addList_button);
         inputListTitle = (EditText)findViewById(R.id.list_item_title_edittext);
         inputListItem = (EditText)findViewById(R.id.list_item_input_edittext);
-        listItemData = new ArrayList<>();
-        newItemAdapter = new ArrayAdapter<>(ListItemsActivity.this, android.R.layout.simple_list_item_1, listItemData);
 
         tempButton = (Button)findViewById(R.id.list_temp_button);
     }
@@ -78,13 +106,16 @@ public class ListItemsActivity extends AppCompatActivity {
                     Toast.makeText(ListItemsActivity.this, "Please enter a list title", Toast.LENGTH_SHORT).show();
                 } else {
 
+                    // Append title to bottom of our list
+                    listItems.add(inputListTitle.getText().toString());
 
-                    listItemData.add(inputListTitle.getText().toString());
+                    Log.d("MAIN", "TTTTTTTTTTBUTTOM TO HOME"+listItems);
+
                     Bundle listBundle = new Bundle();
-                    listBundle.putStringArrayList("returnList", listItemData);
+                    listBundle.putStringArrayList("returnList", listItems);
 
 
-                    Intent data = new Intent();
+                    data = new Intent();
                     //data.putExtra("result", inputListTitle.getText().toString());  //Send String "Surprise" with key to "result"
                     data.putExtra("result", listBundle);
                     setResult(RESULT_OK, data);
@@ -104,7 +135,8 @@ public class ListItemsActivity extends AppCompatActivity {
                     Toast.makeText(ListItemsActivity.this, "Please input an item", Toast.LENGTH_SHORT).show();
                 } else {
                     inputListItem.getText().clear();
-                    listItemData.add(addNewItem);
+                    listItems.add(addNewItem);
+                    Log.d("MAIN", "PpPPPPPPPPP----" + listItems);
                     newItemAdapter.notifyDataSetChanged();
                 }
             }
@@ -140,6 +172,11 @@ public class ListItemsActivity extends AppCompatActivity {
             currentItem.setPaintFlags(1281);
         }
     }
+
+}
+
+
+
 //
 //    // ++===== DOES NOT WORK =====//
 //    @Override
@@ -156,4 +193,3 @@ public class ListItemsActivity extends AppCompatActivity {
 //            }
 //        }
 //    }
-}

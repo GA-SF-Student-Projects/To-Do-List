@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,17 +13,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE = 42;
+    public static final int ITEM_REQUEST_CODE = 33;
+    public static final String DATA_KEY = "myDataKey";
     ListView myToDoListsView;
     FloatingActionButton addNewListButton;
     ArrayAdapter<String> myListsAdapter;
     ArrayList<String> myListsData;
     Intent toItemActivity;
     ArrayList<String> returnedData;
-
+    HashMap<String, ArrayList<String>> myHashMapData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,31 +36,31 @@ public class MainActivity extends AppCompatActivity {
         initializeActivity();
         longItemClickStrikeThrough();
 
-
         /// Setting the Adapter with new data
         returnedData = new ArrayList<>();
         myToDoListsView.setAdapter(myListsAdapter);
-
-//        myToDoListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Bundle sendBundle = new Bundle();
-//                sendBundle.putStringArrayList("sendList", myListsData);
-//
-//                // ++++++ ==== DOES NOT WORK ======
-//                // CHANGE TO SEND HAS MAP DATA
-//                startActivityForResult(toItemActivity, REQUEST_CODE, sendBundle);
-//            }
-//        });
 
         //Goes to new activity to create a new list
         addNewListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toItemActivity.removeExtra(DATA_KEY);
                 startActivityForResult(toItemActivity, REQUEST_CODE);
             }
         });
 
+        myToDoListsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Get item from view, then through into hashmap, then push to an array list
+                String clickedItem = ((TextView)view).getText().toString();
+                //Log.d("Main", "++++++++WHEN CLICKED"+myHashMapData.get(clickedItem));
+
+                toItemActivity.putStringArrayListExtra(DATA_KEY, myHashMapData.get(clickedItem));
+                startActivityForResult(toItemActivity, ITEM_REQUEST_CODE);
+            }
+        });
     }
 
     private void initializeActivity(){
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         myListsData = new ArrayList<>();
         myListsAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, myListsData);
         toItemActivity = new Intent(MainActivity.this, ListItemsActivity.class);
+        myHashMapData = new HashMap<>();
     }
 
     // Returns data from other activity and stores to adapter
@@ -75,14 +80,28 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
 
                 Bundle returnedBundle = data.getBundleExtra("result");
-                // Store Data to different HASHMAPS, so there won't be duplicates
+                returnedData = returnedBundle.getStringArrayList("returnList");
+                String listTitle = returnedData.get(returnedData.size()-1);
+                myHashMapData.put(listTitle, returnedData);
+                Log.d("Main", "===============Returned Data"+myHashMapData);
 
-                myListsAdapter.addAll(returnedBundle.getStringArrayList("returnList").get(0));
-
-                //myListsAdapter.add(data.getStringExtra("result"));
+                myListsAdapter.addAll(listTitle);
                 myListsAdapter.notifyDataSetChanged();
             }
         }
+
+        if(requestCode == ITEM_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+
+                Bundle returnedBundle = data.getBundleExtra("result");
+                returnedData = returnedBundle.getStringArrayList("returnList");
+                String listTitle = returnedData.get(returnedData.size()-1);
+                myHashMapData.put(listTitle, returnedData);
+                Log.d("Main", "===============Returned Data" + myHashMapData);
+                myListsAdapter.notifyDataSetChanged();
+            }
+        }
+
     }
 
     private void longItemClickStrikeThrough() {
@@ -107,3 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+
+

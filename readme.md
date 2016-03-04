@@ -4,7 +4,7 @@ Type: Project
 ---
 
 ## Introduction
-To make a To-Do List
+To-Do List
 
 ## Pending Actions
 - Deal with Return Button <br>
@@ -13,3 +13,4 @@ To make a To-Do List
 - Delete Button <br>
 - Add Modal Dialog Box <br>
 
+![alt tag](https://github.com/ziusziu/To-Do-List/blob/master/ToDo_List_Vertical.png)

@@ -27,7 +27,7 @@
         android:layout_alignParentBottom="true"
         android:tint="#A2ffC5"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"/>
+        android:src="@android:drawable/ic_input_add" />
 
 
 </RelativeLayout>

@@ -48,25 +48,17 @@ public class ListItemsActivity extends AppCompatActivity {
         dataIntent = getIntent();
         updateListItems(dataIntent);
 
-        
+
         newItemAdapter = new ArrayAdapter<>(ListItemsActivity.this, android.R.layout.simple_list_item_1, listItems);
         itemsListView.setAdapter(newItemAdapter);
 
+
         // Save data to Main Activity
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveButtonClickedReturnHome();
-            }
-        });
+        saveButtonClickedReturnHome();
 
         // Add new item to list
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItemToListButtonClicked();
-            }
-        });
+        addItemToListButtonClicked();
+
 
         // Strike through item in list
         itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -116,37 +108,47 @@ public class ListItemsActivity extends AppCompatActivity {
 
     // Add new item to list
     private void addItemToListButtonClicked(){
-        String addNewItem = inputListItem.getText().toString();
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String addNewItem = inputListItem.getText().toString();
 
-        if (checkListItemInput()) {
-            inputListItem.setError("Pleast input an item");
-            //Toast.makeText(ListItemsActivity.this, "Please input an item", Toast.LENGTH_SHORT).show();
-        } else {
-            inputListItem.setText("");
-            listItems.add(addNewItem);
-            Log.d(TAG, "----ADD ITEM TO LIST BUTTON IS CLICKED, ITEMS IN LIST: " + listItems);
-            newItemAdapter.notifyDataSetChanged();
-        }
+                if (checkListItemInput()) {
+                    inputListItem.setError("Pleast input an item");
+                    //Toast.makeText(ListItemsActivity.this, "Please input an item", Toast.LENGTH_SHORT).show();
+                } else {
+                    inputListItem.getText().clear();
+                    listItems.add(addNewItem);
+                    Log.d(TAG, "----ADD ITEM TO LIST BUTTON IS CLICKED, ITEMS IN LIST: " + listItems);
+                    newItemAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     // Save items to Main Activity
     private void saveButtonClickedReturnHome() {
-        if (checkListTitleInput()) {
-            //Toast.makeText(ListItemsActivity.this, "Please enter a list title", Toast.LENGTH_SHORT).show();
-            inputListTitle.setError("Please enter a list title");
-        } else {
-            // Append title to bottom of our list
-            listItems.add(inputListTitle.getText().toString());
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkListTitleInput()) {
+                    //Toast.makeText(ListItemsActivity.this, "Please enter a list title", Toast.LENGTH_SHORT).show();
+                    inputListTitle.setError("Please enter a list title");
+                } else {
+                    // Append title to bottom of our list
+                    listItems.add(inputListTitle.getText().toString());
 
-            Log.d(TAG, ">>>>>>>>>>>>BUTTON TO HOME CLICKED: SAVE ITEMS" + listItems);
+                    Log.d(TAG, ">>>>>>>>>>>>BUTTON TO HOME CLICKED: SAVE ITEMS" + listItems);
 
-            Bundle listBundle = new Bundle();
-            listBundle.putStringArrayList(MainActivity.BUNDLE_KEY, listItems);
+                    Bundle listBundle = new Bundle();
+                    listBundle.putStringArrayList(MainActivity.BUNDLE_KEY, listItems);
 
-            dataIntent.putExtra(MainActivity.INTENT_KEY, listBundle);
-            setResult(RESULT_OK, dataIntent);
-            finish();   // Go to garbage collecting and remove from memory
-        }
+                    dataIntent.putExtra(MainActivity.INTENT_KEY, listBundle);
+                    setResult(RESULT_OK, dataIntent);
+                    finish();   // Go to garbage collecting and remove from memory
+                }
+            }
+        });
     }
 
     // StrikeThrough text

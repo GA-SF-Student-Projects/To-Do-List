@@ -13,4 +13,4 @@ To-Do List
 - Delete Button <br>
 - Add Modal Dialog Box <br>
 
-![alt tag](https://github.com/ziusziu/To-Do-List/blob/master/ToDo_List_Vertical.png)
+![alt tag](ToDoList_Veritcal)
